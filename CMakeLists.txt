@@ -38,7 +38,7 @@ add_subdirectory(compile-time-programming)
 add_subdirectory(concepts)
 add_subdirectory(coroutines)
 add_subdirectory(ranges)
-add_subdirectory(starship-operator)
+add_subdirectory(compare)
 add_subdirectory(std-lib-cpp20)
 add_subdirectory(templates)
 
