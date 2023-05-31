@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <format>
+#include <compare>
 
 using namespace std::literals;
 
