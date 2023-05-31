@@ -36,25 +36,24 @@ struct SuperGadget : Gadget
     // TODO
 };
 
-// TEST_CASE("Gadget - write custom operator <=> - stronger category than auto detected")
-// {
-//     SECTION("==")
-//     {
-//         CHECK(Gadget{"ipad", 1.0} == Gadget{"ipad", 1.0});
-//     }
+TEST_CASE("Gadget - write custom operator <=> - stronger category than auto detected")
+{
+    SECTION("==")
+    {
+        CHECK(Gadget{"ipad", 1.0} == Gadget{"ipad", 1.0});
+    }
     
-//     SECTION("<=>")
-//     {
-//         CHECK(Gadget{"ipad", 1.0} <=> Gadget{"ipad", 1.0} == std::strong_ordering::equal);
-//     }
-// }
+    SECTION("<=>")
+    {
+        CHECK(Gadget{"ipad", 1.0} <=> Gadget{"ipad", 1.0} == std::strong_ordering::equal);
+    }
+}
 
-// TEST_CASE("SuperGadget - write custom operator <=> - member without compare-three-way operator")
-// {
-//     CHECK(SuperGadget{{"ipad", 1.0}, Rating{1}} != SuperGadget{{"ipad", 1.0}, Rating{2}});
-//     CHECK(SuperGadget{{"ipad", 1.0}, Rating{1}} <=> SuperGadget{{"ipad", 1.0}, Rating{2}} == std::strong_ordering::less);    
-// }
-
+TEST_CASE("SuperGadget - write custom operator <=> - member without compare-three-way operator")
+{
+    CHECK(SuperGadget{{"ipad", 1.0}, Rating{1}} != SuperGadget{{"ipad", 1.0}, Rating{2}});
+    CHECK(SuperGadget{{"ipad", 1.0}, Rating{1}} <=> SuperGadget{{"ipad", 1.0}, Rating{2}} == std::strong_ordering::less);    
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -72,7 +71,7 @@ public:
     // TODO
 };
 
-// TEST_CASE("Rating Star - implement nedded <=>")
+// TEST_CASE("Rating Star - implement needed <=>")
 // {
 //     RatingStar r1{RatingValue::good};
     

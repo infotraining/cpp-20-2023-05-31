@@ -43,7 +43,7 @@ add_subdirectory(std-lib-cpp20)
 add_subdirectory(templates)
 
 # Exercises
-# add_subdirectory(_exercises/starship-ex)
+add_subdirectory(_exercises/ex-compare)
 # add_subdirectory(_exercises/concepts-ex)
 
 
