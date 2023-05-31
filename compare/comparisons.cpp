@@ -229,11 +229,3 @@ TEST_CASE("IntNan")
     CHECK_FALSE(IntNan{2} == IntNan{}); // false
     CHECK_FALSE(IntNan{2} <= IntNan{}); // false
 }
-
-constexpr bool flag = false;
-
-template <typename T>
-void swap(T& a, T& b) noexcept(noexcept(expr))
-{
-    a.swap(b);
-}
