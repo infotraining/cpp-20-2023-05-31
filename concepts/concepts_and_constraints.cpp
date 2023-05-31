@@ -6,7 +6,7 @@
 
 using namespace std::literals;
 
-void print(std::ranges::range auto rng, std::string_view prefix = "items")
+void print(auto&& rng, std::string_view prefix = "items")
 {
     std::cout << prefix << ": [ ";
     for(const auto& item : rng)

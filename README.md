@@ -1,5 +1,9 @@
 # Szkolenie - C++20 #
 
+## Docs
+
+* https://infotraining.github.io/docs-cpp-20
+
 ## Konfiguracja środowiska
 
 ### Lokalna
