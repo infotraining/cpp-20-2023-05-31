@@ -44,6 +44,8 @@ add_subdirectory(templates)
 
 # Exercises
 add_subdirectory(_exercises/ex-compare)
-# add_subdirectory(_exercises/concepts-ex)
+add_subdirectory(_exercises/ex-concepts)
+add_subdirectory(_exercises/ex-ranges)
+
 
 
