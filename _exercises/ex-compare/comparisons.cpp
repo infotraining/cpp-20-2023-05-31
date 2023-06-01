@@ -4,6 +4,7 @@
 #include <string>
 #include <format>
 #include <compare>
+#include <cmath>
 
 using namespace std::literals;
 

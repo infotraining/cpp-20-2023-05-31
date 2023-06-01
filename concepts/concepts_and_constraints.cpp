@@ -1,6 +1,9 @@
 #include <catch2/catch_test_macros.hpp>
+#include <cmath>
 #include <iostream>
 #include <map>
+#include <numeric>
+#include <set>
 #include <string>
 #include <vector>
 
@@ -248,14 +251,124 @@ TEST_CASE("constraints")
 }
 
 template <typename T>
-concept BigType = requires(T obj)
-{
-    requires sizeof(obj) > 8;    
+concept BigType = requires(T obj) {
+    requires sizeof(obj) > 8;
 };
 
 static_assert(BigType<int> == false);
 static_assert(BigType<std::vector<int>>);
 
-TEST_CASE("concepts")
+///////////////////////////////////////////////////////////
+
+namespace Cpp11_14
 {
+
+    namespace Detail
+    {
+        template <typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
+        bool is_power_of_2_impl(T value)
+        {
+            return value > 0 && (value & (value - 1)) == 0;
+        }
+
+        template <typename T, typename = std::enable_if_t<std::is_floating_point_v<T>>>
+        auto is_power_of_2_impl(T value)
+        {
+            int exponent;
+            const T mantissa = std::frexp(value, &exponent);
+            return mantissa == static_cast<T>(0.5);
+        }
+    }
+
+    template <typename T>
+    bool is_power_of_2(T value)
+    {
+        return Detail::is_power_of_2_impl(value);
+    }
+
+
+} // namespace Cpp11_14
+
+bool is_power_of_2(std::integral auto value)
+{
+    return value > 0 && (value & (value - 1)) == 0;
+}
+
+auto is_power_of_2(std::floating_point auto value)
+{
+    int exponent;
+    const T mantissa = std::frexp(value, &exponent);
+    return mantissa == static_cast<T>(0.5);
+}
+
+namespace Cpp17
+{
+    template <typename T>
+    bool is_power_of_2(T value)
+    {
+        if constexpr (std::is_integral_v<T>)
+        {
+            return value > 0 && (value & (value - 1)) == 0;
+        }
+        else
+        {
+            int exponent;
+            const T mantissa = std::frexp(value, &exponent);
+            return mantissa == static_cast<T>(0.5);
+        }
+    }
+
+} // namespace Cpp17
+
+TEST_CASE("is_power_of_2")
+{
+    REQUIRE(is_power_of_2(4));
+    REQUIRE(is_power_of_2(8));
+    REQUIRE(is_power_of_2(32));
+    REQUIRE(is_power_of_2(77) == false);
+
+    REQUIRE(is_power_of_2(8.0));
+}
+
+//////////////////////////////////////////
+
+auto add_item(auto& container, auto item)
+{
+    if constexpr (requires { container.push_back(item); })
+    {
+        container.push_back(item);
+        return 42;
+    }
+    else
+    {
+        container.insert(item);
+        return "42"s;
+    }
+}
+
+TEST_CASE("adding items to container")
+{
+    std::vector<int> vec;
+
+    add_item(vec, 1);
+    add_item(vec, 2);
+    add_item(vec, 3);
+
+    CHECK(vec == std::vector{1, 2, 3});
+}
+
+void print_item(std::integral auto item)
+{
+    std::cout << "print_item(std::integral auto item): " << item << "\n";
+}
+
+void print_item(std::integral auto item)
+    requires requires { std::cout << item; }
+{
+    std::cout << "print_item(std::integral auto item) rr: " << item << "\n";
+}
+
+TEST_CASE("printing items")
+{
+    print_item(6);
 }
