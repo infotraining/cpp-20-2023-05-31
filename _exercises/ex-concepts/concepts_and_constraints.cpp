@@ -34,38 +34,73 @@ IndexableContainer concept
 constexpr static bool TODO = false;
 
 template <typename I>
-concept Iterator = TODO;
+concept Iterator = requires(I iter) {
+    *iter;
+    { ++iter } -> std::same_as<I&>;
+    iter++;
+    iter == iter;
+    iter != iter;
+};
+
+static_assert(Iterator<int> == false);
+static_assert(Iterator<std::vector<int>::iterator>);
 
 template <typename Container>
-concept StdContainer = TODO;
+concept StdContainer = requires(Container& container)
+{
+    { std::begin(container) } -> Iterator;
+    { std::end(container) } -> Iterator;
+    { std::size(container) } -> std::convertible_to<size_t>;
+};
+
+template <typename T>
+struct Index
+{
+    using type = size_t;
+};
+
+template <typename T>
+concept WithKeyType = requires { typename T::key_type; };
+
+template <WithKeyType T>
+struct Index<T>
+{
+    using type = typename T::key_type;
+};
+
+template <typename T>
+using Index_t = Index<T>::type;
 
 template <typename C>
-concept Indexable = TODO;
+concept Indexable = requires(C& c, Index_t<C> index)
+{   
+    c[index];
+};
 
 template <typename C>
-concept IndexableContainer = TODO;
+concept IndexableContainer = StdContainer<C> && Indexable<C>;
 
 TEST_CASE("concepts")
 {
-    // static_assert(StdContainer<std::vector<int>>);
-    // static_assert(StdContainer<std::list<int>>);
-    // static_assert(StdContainer<std::set<int>>);
-    // static_assert(StdContainer<std::map<int, std::string>>);
-    // static_assert(StdContainer<std::unordered_map<int, int>>);
-    // static_assert(StdContainer<std::vector<bool>>);
-    // static_assert(StdContainer<std::string>);
-    // int arr[32];
-    // static_assert(StdContainer<decltype(arr)>);
+    static_assert(StdContainer<std::vector<int>>);
+    static_assert(StdContainer<std::list<int>>);
+    static_assert(StdContainer<std::set<int>>);
+    static_assert(StdContainer<std::map<int, std::string>>);
+    static_assert(StdContainer<std::unordered_map<int, int>>);
+    static_assert(StdContainer<std::vector<bool>>);
+    static_assert(StdContainer<std::string>);
+    int arr[32];
+    static_assert(StdContainer<decltype(arr)>);
 
-    // static_assert(IndexableContainer<std::vector<int>>);
-    // static_assert(!IndexableContainer<std::list<int>>);
-    // static_assert(!IndexableContainer<std::set<int>>);
-    // static_assert(IndexableContainer<std::map<int, std::string>>);
-    // static_assert(IndexableContainer<std::map<std::string, std::string>>);
-    // static_assert(IndexableContainer<std::unordered_map<int, int>>);
-    // static_assert(IndexableContainer<std::vector<bool>>);
-    // static_assert(IndexableContainer<std::string>);
-    // static_assert(IndexableContainer<decltype(arr)>);
+    static_assert(IndexableContainer<std::vector<int>>);
+    static_assert(!IndexableContainer<std::list<int>>);
+    static_assert(!IndexableContainer<std::set<int>>);
+    static_assert(IndexableContainer<std::map<int, std::string>>);
+    static_assert(IndexableContainer<std::map<std::string, std::string>>);
+    static_assert(IndexableContainer<std::unordered_map<int, int>>);
+    static_assert(IndexableContainer<std::vector<bool>>);
+    static_assert(IndexableContainer<std::string>);
+    static_assert(IndexableContainer<decltype(arr)>);
 }
 
 void print_all(const StdContainer auto& container)
@@ -92,9 +127,10 @@ void print_all(const IndexableContainer auto& container)
 
 TEST_CASE("container concepts")
 {
-    // std::vector vec = {1, 2, 3, 4};
-    // print_all(vec);
+    std::vector vec = {1, 2, 3, 4};
+    print_all(vec);
 
-    // std::list lst{1, 2, 3};
-    // print_all(lst);
+    std::list lst{1, 2, 3};
+    print_all(lst);
 }
+
