@@ -186,8 +186,6 @@ TEST_CASE("borrowed iterators")
         auto data = get_data();
         auto pos = std::ranges::find(data, 42);
 
-        data.clear
-
         REQUIRE(*pos == 42);
     }
 }
