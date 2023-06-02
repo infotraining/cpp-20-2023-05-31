@@ -12,10 +12,10 @@ using namespace std::literals;
 
 /*********************
 Iterator concept
-1. iterator is derefencable: *iter
+1. iterator is dereferenceable: *iter
 2. can be pre-incremented - returns reference to iterator
-3. can be postincremented
-4. can equiality comparable: supports == and !=
+3. can be post-incremented
+4. can equality comparable: supports == and !=
 **********************/
 
 /*********************
